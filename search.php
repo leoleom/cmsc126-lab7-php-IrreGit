@@ -10,7 +10,7 @@ if (!empty($keyword)){
         FROM Student s
         LEFT JOIN Student_Course sc on s.student_id = sc.student_id
         LEFT JOIN Course c on sc.course_id = c.course_id
-        WHERE s.student_id = '$keyword' OR s.student_name LIKE '$keyword'";
+        WHERE s.student_id = '$keyword' OR s.student_name LIKE '%$keyword%'";
     
     $result = $conn->query($sql);
 
