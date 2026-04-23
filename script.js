@@ -9,6 +9,10 @@ document.addEventListener("DOMContentLoaded", () => {
       resultsDiv.innerHTML = "";
       return;
     }
+
+    // hide update view if open
+    updateDiv.innerHTML = "";
+
     const res = await fetch("search.php?keyword=" + encodeURIComponent(keyword));
     const data = await res.json();
     resultsDiv.innerHTML = "";
@@ -67,6 +71,10 @@ document.addEventListener("DOMContentLoaded", () => {
       updateDiv.innerHTML = "";
       return;
     }
+
+    // hide search results
+    resultsDiv.innerHTML = "";
+
     const res = await fetch("update.php?keyword=" + encodeURIComponent(keyword));
     const data = await res.json();
     updateDiv.innerHTML = "";
@@ -132,4 +140,13 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
     runUpdateSearch(keywordInput.value.trim());
   });
+
+  // assume if pressing enter that we are searching
+  keywordInput.addEventListener("keydown", e => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      runSearch(keywordInput.value.trim());
+    }
+  });
+
 });
