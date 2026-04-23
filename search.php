@@ -1,6 +1,9 @@
 <?php
 include 'DBConnector.php';
+header('Content-Type: application/json');
+
 $keyword = isset($_GET['keyword']) ? $_GET['keyword']: '';
+$response = [];
 
 // gets the keyword from the form on html
 if (!empty($keyword)){
@@ -16,37 +19,21 @@ if (!empty($keyword)){
 
     // creates a table with the data for each match from search query
     if ($result->num_rows > 0) {
-        echo "<table border='1' cellpadding='10'>";
-        echo "<tr>
-                <th>Photo</th>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Age</th>
-                <th>Email</th>
-                <th>Course</th>
-                <th>Year</th>
-                <th>Graduating?</th>
-              </tr>";
-
+        $students = [];
         while($row = $result->fetch_assoc()) {
-            $status = ($row['graduation_status'] == 1) ? "Yes" : "No";
-            
-            echo "<tr>";
-            echo "<td><img src='" . $row['image_path'] . "' width='50' height='50' style='object-fit: cover;'></td>";
-            echo "<td>" . $row['student_id'] . "</td>";
-            echo "<td>" . $row['student_name'] . "</td>";
-            echo "<td>" . $row['age'] . "</td>";
-            echo "<td>" . $row['email'] . "</td>";
-            echo "<td>" . $row['course_name'] . "</td>";
-            echo "<td>" . $row['year_level'] . "</td>";
-            echo "<td>" . $status . "</td>";
-            echo "</tr>";
+            $row['graduation_status'] = ($row['graduation_status'] == 1) ? "Yes" : "No";
+            $students[] = $row;
         }
-        echo "</table>";
+        $response = ["success" => true, "students" => $students]; 
     } else {
-        echo "You are delulu (Student with that ID or name does not exist).";
+        $response = ["success" => false, "message" => "No student found"]; 
     }
-} 
-echo "<br><br><a href='index.html'>Back to Registration</a>";
+    
+} else {
+    $response = ["success" => false, "message" => "No keyword provided"]; 
+}
+
+
+echo json_encode($response);
 $conn->close();
 ?>

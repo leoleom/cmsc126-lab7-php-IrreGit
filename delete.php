@@ -1,5 +1,7 @@
 <?php
 include 'DBConnector.php';
+header('Content-Type: application/json');
+$response = [];
 
 // gets the keyword from the form on html
 $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
@@ -24,14 +26,16 @@ if (!empty($keyword)) {
 
         $deleteSql = "DELETE FROM Student WHERE student_id = $studentId";
         
-        if ($conn->query($deleteSql) === TRUE) {
-            echo "Student has been purged.<br>";
+        if ($conn->query($deleteSql)) {
+            $response = ["success" => true, "message" => "Student has been purged."];
         }
     } else {
-        echo "You are delulu (Student doesn't exist).";
+        $response = ["success" => false, "message" => "Student doesn't exist."];
     }
-} 
+} else {
+    $response = ["success" => false, "message" => "No keyword provided."]; 
+}
 
-echo "<br><br><a href='index.html'>Back to Registration</a>";
+echo json_encode($response);
 $conn->close();
 ?>

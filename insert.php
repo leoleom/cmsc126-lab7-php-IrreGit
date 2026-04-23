@@ -1,5 +1,8 @@
 <?php
 include 'DBConnector.php';
+header('Content-Type: application/json');
+
+$response = [];
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     
@@ -8,9 +11,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $checkEmail = "SELECT * FROM Student where email = '$email'";
     $result = $conn->query($checkEmail);
     if($result->num_rows > 0){
-        echo "This email has already been registered to another student";
-        echo "<br><br><a href='index.html'>Back to Registration</a>";
-        exit;
+        $response = ["success" => false, "message" => "Email already registered"];
     }
 
     else{
@@ -54,11 +55,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             
             $sql_link = "INSERT INTO Student_Course(student_id, course_id) VALUES ($last_stud_id, $last_course_id)";
             $conn -> query($sql_link);
+
+            $response = ["success" => true, "message" => "Student registered successfully"];
         }
 
-        echo "Student registered successfully!";
+        else {
+            $response = ["success" => false, "message" => "Failed to register student"]; 
+        }
     }
 }
-header("Location: index.html?status=success");
+
+echo json_encode($response);
 $conn->close();
 ?>

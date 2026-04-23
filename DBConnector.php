@@ -14,9 +14,12 @@ $conn = new mysqli($servername, $username, $password);
 // }
 // echo "Connected succesfully <br/>";
 
-// database creation
+/* ===== DATABASE CREATION ===== */
+
 $sql_db = "CREATE DATABASE IF NOT EXISTS $dbname";
+
 $conn->query($sql_db);
+
 // if ($conn->query($sql_db) === TRUE) {
 //     echo "Database created successfully <br>";
 // } else {
