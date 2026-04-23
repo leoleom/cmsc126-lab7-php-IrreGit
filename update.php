@@ -1,6 +1,29 @@
 <?php
 include 'DBConnector.php';
 
+// Handle the actual database UPDATE when the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $id = $_POST['student_id']; 
+    $name = $_POST['name'];
+    $age = $_POST['age'];
+    $email = $_POST['email'];
+    $year = $_POST['year_level'];
+    $grad = isset($_POST['graduation_status']) ? 1 : 0;
+    
+    // Update query for the Student table
+    $updateSql = "UPDATE Student SET student_name='$name', age='$age', email='$email', year_level='$year', graduation_status='$grad' WHERE student_id='$id'"; 
+    
+    if ($conn->query($updateSql) === TRUE) {
+        echo "Student record updated successfully!<br>";
+        echo "<br><a href='index.html'>Back to Registration</a>";
+    } else {
+        echo "Error updating record: " . $conn->error;
+    }
+    
+    $conn->close();
+    exit; // Stop the script here so it doesn't try to load the GET request logic below
+}
+
 // Handle the GET request from index.html to find student
 $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
 
