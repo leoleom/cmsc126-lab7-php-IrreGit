@@ -18,7 +18,6 @@ document.addEventListener("DOMContentLoaded", () => {
       data.students.forEach(s => {
         table += `<tr>
           <td><img src="${s.image_path}" width="50" height="50"></td>
-          <td>${s.student_id}</td>
           <td>${s.student_name}</td>
           <td>${s.age}</td>
           <td>${s.email}</td>
